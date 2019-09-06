@@ -1,5 +1,5 @@
 import pureFunctions from '../nodes/shared/pureFunctions';
-import { ObjectPath } from '../values';
+import { ObjectPath, UnknownKey } from '../values';
 import Variable from './Variable';
 
 export default class GlobalVariable extends Variable {
@@ -13,10 +13,13 @@ export default class GlobalVariable extends Variable {
 	}
 
 	hasEffectsWhenCalledAtPath(path: ObjectPath) {
-		return !pureFunctions.has([this.name, ...path].join('.'));
+		return (
+			path.some(key => key === UnknownKey) || !pureFunctions.has([this.name, ...path].join('.'))
+		);
 	}
 
 	private isPureFunctionMember(path: ObjectPath) {
+		if (path.some(key => key === UnknownKey)) return false;
 		return (
 			pureFunctions.has([this.name, ...path].join('.')) ||
 			(path.length >= 1 && pureFunctions.has([this.name, ...path.slice(0, -1)].join('.'))) ||
