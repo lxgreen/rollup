@@ -1,7 +1,7 @@
 import { DeoptimizableEntity } from '../DeoptimizableEntity';
 import { ExecutionContext } from '../ExecutionContext';
 import { PathTracker } from '../utils/PathTracker';
-import { EMPTY_PATH, LiteralValueOrUnknown, ObjectPath, UNKNOWN_VALUE } from '../values';
+import { EMPTY_PATH, LiteralValueOrUnknown, ObjectPath, UnknownValue } from '../values';
 import { LiteralValue } from './Literal';
 import * as NodeType from './NodeType';
 import { ExpressionNode, NodeBase } from './shared/Node';
@@ -12,7 +12,7 @@ const unaryOperators: {
 	'!': value => !value,
 	'+': value => +(value as NonNullable<LiteralValue>),
 	'-': value => -(value as NonNullable<LiteralValue>),
-	delete: () => UNKNOWN_VALUE,
+	delete: () => UnknownValue,
 	typeof: value => typeof value,
 	void: () => undefined,
 	'~': value => ~(value as NonNullable<LiteralValue>)
@@ -36,11 +36,11 @@ export default class UnaryExpression extends NodeBase {
 		recursionTracker: PathTracker,
 		origin: DeoptimizableEntity
 	): LiteralValueOrUnknown {
-		if (path.length > 0) return UNKNOWN_VALUE;
+		if (path.length > 0) return UnknownValue;
 		const argumentValue = this.argument.getLiteralValueAtPath(EMPTY_PATH, recursionTracker, origin);
-		if (argumentValue === UNKNOWN_VALUE) return UNKNOWN_VALUE;
+		if (argumentValue === UnknownValue) return UnknownValue;
 
-		return unaryOperators[this.operator](argumentValue as LiteralValue);
+		return unaryOperators[this.operator](argumentValue);
 	}
 
 	hasEffects(context: ExecutionContext): boolean {

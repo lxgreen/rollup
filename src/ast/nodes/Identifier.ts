@@ -7,7 +7,7 @@ import { DeoptimizableEntity } from '../DeoptimizableEntity';
 import { ExecutionContext } from '../ExecutionContext';
 import FunctionScope from '../scopes/FunctionScope';
 import { PathTracker } from '../utils/PathTracker';
-import { LiteralValueOrUnknown, ObjectPath, UNKNOWN_EXPRESSION, UNKNOWN_VALUE } from '../values';
+import { LiteralValueOrUnknown, ObjectPath, UNKNOWN_EXPRESSION, UnknownValue } from '../values';
 import LocalVariable from '../variables/LocalVariable';
 import Variable from '../variables/Variable';
 import * as NodeType from './NodeType';
@@ -91,7 +91,7 @@ export default class Identifier extends NodeBase implements PatternNode {
 		if (this.variable !== null) {
 			return this.variable.getLiteralValueAtPath(path, recursionTracker, origin);
 		}
-		return UNKNOWN_VALUE;
+		return UnknownValue;
 	}
 
 	getReturnExpressionWhenCalledAtPath(
