@@ -312,7 +312,7 @@ export default async function rollup(rawInputOptions: GenericConfigObject): Prom
 				let chunkCnt = 0;
 				for (const fileName of Object.keys(bundle)) {
 					const file = bundle[fileName];
-					if (file.type === 'asset') continue;
+					if (file.type !== 'chunk') continue;
 					chunkCnt++;
 					if (chunkCnt > 1) break;
 				}
